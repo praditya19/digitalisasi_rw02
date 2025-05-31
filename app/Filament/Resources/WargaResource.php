@@ -14,6 +14,10 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 
 class WargaResource extends Resource
 {
@@ -149,8 +153,9 @@ class WargaResource extends Resource
 
                 Forms\Components\Section::make('Anggota Keluarga')
                     ->schema([
-                        Forms\Components\Repeater::make('anggota_keluarga')
+                        Forms\Components\Repeater::make('anggotaKeluarga')
                             ->label('')
+                            ->relationship()
                             ->schema([
                                 Forms\Components\Grid::make(2)
                                     ->schema([
@@ -221,6 +226,8 @@ class WargaResource extends Resource
                                             ])
                                             ->nullable()
                                             ->columnSpan(1),
+
+                                        Forms\Components\Hidden::make('jenis_warga')->default('anggota_keluarga'),
                                     ])
                             ])
                             ->addActionLabel('Tambah Anggota Keluarga')
@@ -235,16 +242,99 @@ class WargaResource extends Resource
             ->columns(1);
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Section::make('Data Kepala Keluarga')
+                    ->schema([
+                        TextEntry::make('nomor_keluarga')
+                            ->label('Nomor Keluarga'),
+                        TextEntry::make('nama_lengkap')
+                            ->label('Nama Lengkap'),
+                        TextEntry::make('email')
+                            ->label('Email'),
+                        TextEntry::make('nomor_hp')
+                            ->label('Nomor HP'),
+                        TextEntry::make('rt')
+                            ->label('RT')
+                            ->formatStateUsing(fn($state) => "RT {$state}"),
+                        TextEntry::make('jenis_kelamin')
+                            ->label('Jenis Kelamin'),
+                        TextEntry::make('status_rumah')
+                            ->label('Status Rumah'),
+                        TextEntry::make('pendidikan')
+                            ->label('Pendidikan'),
+                        TextEntry::make('pekerjaan')
+                            ->label('Pekerjaan'),
+                        TextEntry::make('domisili')
+                            ->label('Domisili'),
+                        TextEntry::make('tanggal_lahir')
+                            ->label('Tanggal Lahir')
+                            ->date('d F Y'),
+                    ])
+                    ->columns(2),
+
+                Section::make('Anggota Keluarga')
+                    ->schema([
+                        RepeatableEntry::make('anggotaKeluarga')
+                            ->label('')
+                            ->schema([
+                                TextEntry::make('nama_lengkap')
+                                    ->label('Nama Lengkap'),
+                                TextEntry::make('status_keluarga')
+                                    ->label('Status dalam Keluarga')
+                                    ->formatStateUsing(function ($state) {
+                                        $statusMap = [
+                                            'suami' => 'Suami',
+                                            'istri' => 'Istri',
+                                            'anak' => 'Anak',
+                                            'kakak' => 'Kakak',
+                                            'adik' => 'Adik',
+                                            'ibu' => 'Ibu',
+                                            'ayah' => 'Ayah',
+                                            'lainnya' => 'Lainnya',
+                                        ];
+                                        return $statusMap[$state] ?? $state;
+                                    }),
+                                TextEntry::make('nomor_hp')
+                                    ->label('Nomor HP'),
+                                TextEntry::make('jenis_kelamin')
+                                    ->label('Jenis Kelamin'),
+                                TextEntry::make('tanggal_lahir')
+                                    ->label('Tanggal Lahir')
+                                    ->date('d F Y'),
+                                TextEntry::make('pekerjaan')
+                                    ->label('Pekerjaan'),
+                                TextEntry::make('pendidikan')
+                                    ->label('Pendidikan'),
+                                TextEntry::make('domisili')
+                                    ->label('Domisili'),
+                            ])
+                            ->columns(2)
+                            ->columnSpanFull(),
+                    ])
+                    ->visible(fn($record) => $record->anggotaKeluarga->count() > 0)
+                    ->columnSpanFull(),
+            ]);
+    }
+
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn($query) => $query->where('jenis_warga', 'kepala_keluarga'))
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_keluarga')->label('Nomor Keluarga'),
                 Tables\Columns\TextColumn::make('nama_lengkap')->label('Nama Lengkap'),
-                Tables\Columns\TextColumn::make('jenis_warga')->label('Jenis Warga'),
                 Tables\Columns\TextColumn::make('rt')->label('RT'),
                 Tables\Columns\TextColumn::make('domisili')->label('Domisili'),
                 Tables\Columns\TextColumn::make('email')->label('Email'),
+                Tables\Columns\TextColumn::make('anggotaKeluarga')
+                    ->label('Jumlah Anggota')
+                    ->formatStateUsing(function ($record) {
+                        $jumlah = $record->anggotaKeluarga->count();
+                        return $jumlah . ' orang';
+                    }),
             ])
             ->emptyStateHeading('Tidak Ada Warga')
             ->emptyStateDescription('Belum ada data Warga yang tersedia.')
@@ -285,6 +375,9 @@ class WargaResource extends Resource
                     ])
             ])
             ->actions([
+                Tables\Actions\ViewAction::make()
+                    ->label('Lihat')
+                    ->icon('heroicon-m-eye'),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()->before(function ($record) {
                     User::where('email', $record->email)->delete();
@@ -301,6 +394,7 @@ class WargaResource extends Resource
             'index' => Pages\ListWargas::route('/'),
             'create' => Pages\CreateWarga::route('/create'),
             'edit' => Pages\EditWarga::route('/{record}/edit'),
+            'view' => Pages\ViewWarga::route('/{record}'),
         ];
     }
 }

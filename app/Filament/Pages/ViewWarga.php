@@ -4,33 +4,27 @@ namespace App\Filament\Resources\WargaResource\Pages;
 
 use App\Filament\Resources\WargaResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditWarga extends EditRecord
+class ViewWarga extends ViewRecord
 {
     protected static string $resource = WargaResource::class;
 
     public function getTitle(): string
     {
-        return 'Edit Data Keluarga: ' . $this->record->nama_lengkap;
+        return 'Detail Keluarga: ' . $this->record->nama_lengkap;
     }
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make()
-                ->label('Lihat Detail'),
-            Actions\DeleteAction::make(),
+            Actions\EditAction::make()
+                ->label('Edit Data'),
         ];
     }
 
     protected function resolveRecord($key): \Illuminate\Database\Eloquent\Model
     {
         return static::getResource()::resolveRecordRouteBinding($key)->load('anggotaKeluarga');
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }
