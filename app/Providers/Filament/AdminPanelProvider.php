@@ -47,7 +47,7 @@ class AdminPanelProvider extends PanelProvider
                 UsiaChart::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-            ->brandName('WargaKu')
+            ->brandName('RW 02 Wonosari')
             ->spa()
             ->colors([
                 'danger' => Color::Rose,

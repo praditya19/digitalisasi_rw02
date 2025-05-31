@@ -33,6 +33,11 @@ class KetuaResource extends Resource
         return 'Ketua RT';
     }
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->role === 'Admin' || auth()->user()->role === 'Ketua RW';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
