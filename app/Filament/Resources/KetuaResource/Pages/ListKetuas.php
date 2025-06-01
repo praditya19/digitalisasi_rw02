@@ -10,16 +10,10 @@ class ListKetuas extends ListRecords
 {
     protected static string $resource = KetuaResource::class;
 
-    public function getTitle(): string
-    {
-        return 'Ketua RT';
-    }
-
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Tambah Ketua RT'),
+            Actions\CreateAction::make(),
         ];
     }
 }

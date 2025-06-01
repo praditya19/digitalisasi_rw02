@@ -10,16 +10,10 @@ class ListWargas extends ListRecords
 {
     protected static string $resource = WargaResource::class;
 
-    public function getTitle(): string
-    {
-        return 'Warga';
-    }
-
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->label('Tambah Data Warga'),
+            Actions\CreateAction::make(),
         ];
     }
 }

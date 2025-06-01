@@ -20,4 +20,9 @@ class Umkm extends Model
         'alamat',
         'nomor_hp',
     ];
+
+    public function produk()
+    {
+        return $this->hasMany(ProdukUmkm::class, 'umkm_id');
+    }
 }

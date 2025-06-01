@@ -10,10 +10,7 @@ class CreateWarga extends CreateRecord
 {
     protected static string $resource = WargaResource::class;
 
-    public function getTitle(): string
-    {
-        return 'Tambah Data Warga';
-    }
+    protected static bool $canCreateAnother = false;
 
     protected function getRedirectUrl(): string
     {
