@@ -56,12 +56,12 @@ class RiwayatKependudukanResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('warga.nama_lengkap')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('warga.rt')->label('RT')->sortable(),
+                Tables\Columns\TextColumn::make('warga.nama_lengkap')->label('Nama Lengkap'),
+                Tables\Columns\TextColumn::make('warga.rt')->label('RT'),
                 Tables\Columns\TextColumn::make('tanggal_perubahan')->date(),
                 Tables\Columns\TextColumn::make('jenis_perubahan'),
                 Tables\Columns\TextColumn::make('keterangan')->limit(30),
-                Tables\Columns\TextColumn::make('diubah_oleh')->searchable(),
+                Tables\Columns\TextColumn::make('diubah_oleh'),
             ])
             ->emptyStateHeading('Tidak Ada Riwayat Kependudukan')
             ->emptyStateDescription('Belum ada data Warga yang tersedia.')

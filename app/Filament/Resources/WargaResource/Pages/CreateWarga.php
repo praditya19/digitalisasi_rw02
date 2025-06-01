@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\WargaResource\Pages;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Filament\Resources\WargaResource;
 use Filament\Resources\Pages\CreateRecord;
-use App\Models\Warga;
 
 class CreateWarga extends CreateRecord
 {
@@ -19,22 +20,13 @@ class CreateWarga extends CreateRecord
 
     protected function afterCreate(): void
     {
-        // Generate nomor keluarga otomatis jika belum ada
-        if (empty($this->record->nomor_keluarga)) {
-            $lastNumber = Warga::where('jenis_warga', 'kepala_keluarga')
-                ->where('nomor_keluarga', 'like', 'KK%')
-                ->orderBy('nomor_keluarga', 'desc')
-                ->first();
+        $data = $this->record;
 
-            if ($lastNumber) {
-                $number = intval(substr($lastNumber->nomor_keluarga, 2)) + 1;
-            } else {
-                $number = 1;
-            }
-
-            $this->record->update([
-                'nomor_keluarga' => 'KK' . str_pad($number, 4, '0', STR_PAD_LEFT)
-            ]);
-        }
+        User::create([
+            'name' => $data->nama_lengkap,
+            'email' => $data->email,
+            'password' => Hash::make('123'),
+            'role' => 'Kepala Keluarga',
+        ]);
     }
 }

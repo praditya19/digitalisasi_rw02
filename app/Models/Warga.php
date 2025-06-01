@@ -11,8 +11,12 @@ class Warga extends Model
 
     protected $table = 'warga';
 
+    public const JENIS_WARGA_KEPALA = 'Kepala Keluarga';
+    public const JENIS_WARGA_ANGGOTA = 'Anggota Keluarga';
+
     protected $fillable = [
         'nomor_keluarga',
+        'nik',
         'nama_lengkap',
         'email',
         'nomor_hp',
@@ -26,12 +30,11 @@ class Warga extends Model
         'kepala_keluarga_id',
         'domisili',
         'tanggal_lahir',
-        'anggota_keluarga',
     ];
 
     protected $casts = [
         'tanggal_lahir' => 'date',
-        'anggota_keluarga' => 'array',
+        'Anggota Keluarga' => 'array',
     ];
 
     public function anggotaKeluarga()
@@ -46,11 +49,11 @@ class Warga extends Model
 
     public function scopeKepalaKeluarga($query)
     {
-        return $query->where('jenis_warga', 'kepala_keluarga');
+        return $query->where('jenis_warga', self::JENIS_WARGA_KEPALA);
     }
 
     public function scopeAnggotaKeluarga($query)
     {
-        return $query->where('jenis_warga', 'anggota_keluarga');
+        return $query->where('jenis_warga', self::JENIS_WARGA_ANGGOTA);
     }
 }

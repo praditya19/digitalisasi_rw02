@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 01, 2025 at 02:42 AM
+-- Generation Time: Jun 01, 2025 at 08:11 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -38,8 +38,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('laravel_cache_livewire-rate-limiter:7f98824f949c9d7384bf2a0786f8f8fbef0532f5', 'i:1;', 1748705457),
-('laravel_cache_livewire-rate-limiter:7f98824f949c9d7384bf2a0786f8f8fbef0532f5:timer', 'i:1748705457;', 1748705457);
+('laravel_cache_livewire-rate-limiter:7f98824f949c9d7384bf2a0786f8f8fbef0532f5', 'i:1;', 1748746870),
+('laravel_cache_livewire-rate-limiter:7f98824f949c9d7384bf2a0786f8f8fbef0532f5:timer', 'i:1748746870;', 1748746870);
 
 -- --------------------------------------------------------
 
@@ -148,7 +148,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2025_05_24_155310_create_wargas_table', 1),
 (7, '2025_05_30_091412_create_riwayat_kependudukan_table', 1),
 (8, '2025_05_30_165136_alter_role_length_in_users_table', 1),
-(9, '2025_05_31_153349_create_umkms_table', 2);
+(9, '2025_05_31_153349_create_umkms_table', 1),
+(10, '2025_06_01_024319_create_produk_umkms_table', 2),
+(11, '2025_06_01_024355_create_transaksi_umkms_table', 3);
 
 -- --------------------------------------------------------
 
@@ -160,6 +162,23 @@ CREATE TABLE `password_reset_tokens` (
   `email` varchar(255) NOT NULL,
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produk_umkm`
+--
+
+CREATE TABLE `produk_umkm` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama_produk` varchar(255) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
+  `stok` int(11) NOT NULL DEFAULT 0,
+  `harga` decimal(12,2) NOT NULL,
+  `umkm_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -199,8 +218,23 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('6mcIegAaAxXPCO0QnuNbNOlhs27N8XAFWSMwyrO2', 1, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiMjNHelhoZkhOd1l0Nk9FVmtHbWFsZmNDQkNuZmlMNjVmZlo1UVZoWSI7czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjE3OiJwYXNzd29yZF9oYXNoX3dlYiI7czo2MDoiJDJ5JDEyJG9jb2VzWjgzNDlXR1VLWTBWTldaN2Vlc2R6TEN0VGVYdER1a2hVT2ZieEFPWE5jNnkvYVZTIjtzOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czozMzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL3Vta21zIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1748738224),
-('S5KJS0V89ErW3J2O1qPiSJyBphUW6q6Aob8B2BMl', 1, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiT3Z4QklFTEZ4NzlLU3lPcXBQMDlaWDVoZDIyaWEwZUhRU3pocTYzMCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMzOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYWRtaW4vdW1rbXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MTc6InBhc3N3b3JkX2hhc2hfd2ViIjtzOjYwOiIkMnkkMTIkb2NvZXNaODM0OVdHVUtZMFZOV1o3ZWVzZHpMQ3RUZVh0RHVraFVPZmJ4QU9YTmM2eS9hVlMiO30=', 1748706930);
+('p8akUGS6Y3KNnUAUiRkr4f9gBZIEjBg8PsI9aW3K', 1, '127.0.0.1', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo3OntzOjY6Il90b2tlbiI7czo0MDoiWXp0empwOURhZUdtRFFWZDBIc1B3dEdIS1Y2NXI5ZlV2c2VGUFFwaCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMzOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYWRtaW4vdW1rbXMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO3M6MTc6InBhc3N3b3JkX2hhc2hfd2ViIjtzOjYwOiIkMnkkMTIkNWpOWWt1dHE4LjFSLkJZd2UxcWtmdUVaeWV6SGw0MFg4Y3VkUEx1dTU2VVRyZUZXbHJaV3kiO3M6ODoiZmlsYW1lbnQiO2E6MDp7fX0=', 1748758197);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi_umkm`
+--
+
+CREATE TABLE `transaksi_umkm` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `produk_umkm_id` bigint(20) UNSIGNED NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `total_harga` decimal(12,2) NOT NULL,
+  `status` enum('pending','selesai','batal') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -244,8 +278,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Administrator', 'admin@gmail.com', NULL, '$2y$12$ocoesZ8349WGUKY0VNWZ7eesdzLCtTeXtDukhUOfbxAOXNc6y/aVS', 'Admin', 'Av9nTBSW648QUGfeEYjqXNXwEPjm8VGxY72dpD6XJq1ZWn9uj3XXKvHvbnHl', '2025-05-31 08:28:15', '2025-05-31 08:28:15'),
-(2, 'Ketua RW 02', 'rw02@gmail.com', NULL, '$2y$12$SapJHstPtcozdJwWh.6r8u0zJOHL3RC4vAFgPf/wG64tLPvFG4qpa', 'Ketua RW', NULL, '2025-05-31 08:29:26', '2025-05-31 08:29:26');
+(1, 'Admin', 'admin@gmail.com', NULL, '$2y$12$5jNYkutq8.1R.BYwe1qkfuEZyezHl40X8cudPLuu56UTreFWlrZWy', 'Admin', 'EGRxKaMUjPhbKwaZVbFMDYfgTwf96SilfkQnLpZlZnsYFF1rO4c4i4tEC81p', '2025-05-31 19:59:52', '2025-05-31 19:59:52'),
+(2, 'Ketua Rw 02', 'rw02@gmail.com', NULL, '$2y$12$OHj.7Ts9GY6cQn41Vn/V8Ocz1yKPc6aJ8vzyl0Y/5CMnfnzhstebW', 'Ketua RW 02', NULL, '2025-05-31 20:06:17', '2025-05-31 20:06:17');
 
 -- --------------------------------------------------------
 
@@ -330,6 +364,13 @@ ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
 
 --
+-- Indexes for table `produk_umkm`
+--
+ALTER TABLE `produk_umkm`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `produk_umkm_umkm_id_foreign` (`umkm_id`);
+
+--
 -- Indexes for table `riwayat_kependudukan`
 --
 ALTER TABLE `riwayat_kependudukan`
@@ -343,6 +384,13 @@ ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `sessions_user_id_index` (`user_id`),
   ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Indexes for table `transaksi_umkm`
+--
+ALTER TABLE `transaksi_umkm`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transaksi_umkm_produk_umkm_id_foreign` (`produk_umkm_id`);
 
 --
 -- Indexes for table `umkm`
@@ -394,12 +442,24 @@ ALTER TABLE `ketua_rt`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `produk_umkm`
+--
+ALTER TABLE `produk_umkm`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `riwayat_kependudukan`
 --
 ALTER TABLE `riwayat_kependudukan`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `transaksi_umkm`
+--
+ALTER TABLE `transaksi_umkm`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
@@ -425,10 +485,22 @@ ALTER TABLE `warga`
 --
 
 --
+-- Constraints for table `produk_umkm`
+--
+ALTER TABLE `produk_umkm`
+  ADD CONSTRAINT `produk_umkm_umkm_id_foreign` FOREIGN KEY (`umkm_id`) REFERENCES `umkm` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `riwayat_kependudukan`
 --
 ALTER TABLE `riwayat_kependudukan`
   ADD CONSTRAINT `riwayat_kependudukan_warga_id_foreign` FOREIGN KEY (`warga_id`) REFERENCES `warga` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `transaksi_umkm`
+--
+ALTER TABLE `transaksi_umkm`
+  ADD CONSTRAINT `transaksi_umkm_produk_umkm_id_foreign` FOREIGN KEY (`produk_umkm_id`) REFERENCES `produk_umkm` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `warga`

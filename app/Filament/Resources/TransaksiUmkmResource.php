@@ -16,7 +16,7 @@ class TransaksiUmkmResource extends Resource
 {
     protected static ?string $model = TransaksiUmkm::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-receipt-percent';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?string $navigationGroup = 'Kelola UMKM Warga';
 

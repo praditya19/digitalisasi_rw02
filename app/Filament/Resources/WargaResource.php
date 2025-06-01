@@ -47,9 +47,25 @@ class WargaResource extends Resource
                     ->schema([
                         Forms\Components\Grid::make(2)
                             ->schema([
+                                Forms\Components\TextInput::make('nomor_keluarga')
+                                    ->label('Nomor Kartu Keluarga')
+                                    ->required()
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->maxLength(20),
+
                                 Forms\Components\TextInput::make('nama_lengkap')
                                     ->label('Nama Kepala Keluarga')
                                     ->required(),
+
+                                Forms\Components\TextInput::make('nik')
+                                    ->label('Nomor NIK')
+                                    ->required()
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->maxLength(20),
+
+                                Forms\Components\DatePicker::make('tanggal_lahir')->nullable(),
 
                                 Forms\Components\Select::make('status_keluarga')
                                     ->label('Status dalam Keluarga')
@@ -74,8 +90,8 @@ class WargaResource extends Resource
                                     ->label('Nomor HP')
                                     ->nullable()
                                     ->numeric()
-                                    ->maxLength(20)
-                                    ->rule('regex:/^[0-9]+$/'),
+                                    ->minValue(0)
+                                    ->maxLength(20),
 
                                 Forms\Components\Select::make('rt')
                                     ->label('RT')
@@ -103,21 +119,24 @@ class WargaResource extends Resource
                                     ])
                                     ->nullable(),
 
-                                Forms\Components\Select::make('status_rumah')
+                                Forms\Components\Select::make('pekerjaan')
                                     ->options([
-                                        'Milik Sendiri' => 'Milik Sendiri',
-                                        'Kontrak' => 'Kontrak',
-                                        'Kos' => 'Kos',
+                                        'Swasta' => 'Pegawai Swasta',
+                                        'Negeri' => 'Pegawai Negeri',
+                                        'Ibu Rumah Tangga' => 'Ibu Rumah Tangga',
+                                        'Pelajar/Mahasiswa' => 'Pelajar/Mahasiswa',
+                                        'Tidak Bekerja' => 'Tidak Bekerja',
                                     ])
-                                    ->nullable(),
+                                    ->nullable()
+                                    ->reactive(),
 
                                 Forms\Components\Select::make('pendidikan')
-                                    ->label('Pendidikan')
+                                    ->label('Pendidikan Terakhir')
                                     ->options([
                                         'Tidak Sekolah' => 'Tidak Sekolah',
                                         'SD' => 'SD',
                                         'SMP' => 'SMP',
-                                        'SMA' => 'SMA',
+                                        'SMA/SMK' => 'SMA/SMK',
                                         'D1' => 'D1',
                                         'D2' => 'D2',
                                         'D3' => 'D3',
@@ -125,15 +144,14 @@ class WargaResource extends Resource
                                         'S2' => 'S2',
                                         'S3' => 'S3',
                                     ])
+                                    ->visible(fn($get) => $get('pekerjaan') !== 'Pelajar/Mahasiswa')
                                     ->nullable(),
 
-                                Forms\Components\Select::make('pekerjaan')
+                                Forms\Components\Select::make('status_rumah')
                                     ->options([
-                                        'Swasta' => 'Pegawai Swasta',
-                                        'Negeri' => 'Pegawai Negeri',
-                                        'Ibu Rumah Tangga' => 'Ibu Rumah Tangga',
-                                        'Pelajar' => 'Pelajar/Mahasiswa',
-                                        'Tidak Bekerja' => 'Tidak Bekerja',
+                                        'Milik Sendiri' => 'Milik Sendiri',
+                                        'Kontrak' => 'Kontrak',
+                                        'Kos' => 'Kos',
                                     ])
                                     ->nullable(),
 
@@ -144,11 +162,9 @@ class WargaResource extends Resource
                                         'Diluar' => 'Diluar',
                                     ])
                                     ->nullable(),
-
-                                Forms\Components\DatePicker::make('tanggal_lahir')->nullable(),
                             ]),
 
-                        Forms\Components\Hidden::make('jenis_warga')->default('kepala_keluarga'),
+                        Forms\Components\Hidden::make('jenis_warga')->default('Kepala Keluarga'),
                     ]),
 
                 Forms\Components\Section::make('Anggota Keluarga')
@@ -162,6 +178,32 @@ class WargaResource extends Resource
                                         Forms\Components\TextInput::make('nama_lengkap')
                                             ->required()
                                             ->label('Nama Lengkap'),
+
+                                        Forms\Components\TextInput::make('nik')
+                                            ->label('Nomor NIK')
+                                            ->required()
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->maxLength(20),
+
+                                        Forms\Components\Select::make('rt')
+                                            ->label('RT')
+                                            ->required()
+                                            ->options([
+                                                '1' => 'RT 1',
+                                                '2' => 'RT 2',
+                                                '3' => 'RT 3',
+                                                '4' => 'RT 4',
+                                                '5' => 'RT 5',
+                                                '6' => 'RT 6',
+                                                '7' => 'RT 7',
+                                                '8' => 'RT 8',
+                                                '9' => 'RT 9',
+                                                '10' => 'RT 10',
+                                                '11' => 'RT 11',
+                                                '12' => 'RT 12',
+                                                '13' => 'RT 13',
+                                            ]),
 
                                         Forms\Components\Select::make('status_keluarga')
                                             ->label('Status dalam Keluarga')
@@ -181,8 +223,8 @@ class WargaResource extends Resource
                                             ->label('Nomor HP')
                                             ->nullable()
                                             ->numeric()
-                                            ->maxLength(20)
-                                            ->rule('regex:/^[0-9]+$/'),
+                                            ->minValue(0)
+                                            ->maxLength(20),
 
                                         Forms\Components\Select::make('jenis_kelamin')
                                             ->options([
@@ -198,10 +240,11 @@ class WargaResource extends Resource
                                                 'Swasta' => 'Pegawai Swasta',
                                                 'Negeri' => 'Pegawai Negeri',
                                                 'Ibu Rumah Tangga' => 'Ibu Rumah Tangga',
-                                                'Pelajar' => 'Pelajar/Mahasiswa',
+                                                'Pelajar/Mahasiswa' => 'Pelajar/Mahasiswa',
                                                 'Tidak Bekerja' => 'Tidak Bekerja',
                                             ])
-                                            ->nullable(),
+                                            ->nullable()
+                                            ->reactive(),
 
                                         Forms\Components\Select::make('pendidikan')
                                             ->label('Pendidikan')
@@ -209,7 +252,7 @@ class WargaResource extends Resource
                                                 'Tidak Sekolah' => 'Tidak Sekolah',
                                                 'SD' => 'SD',
                                                 'SMP' => 'SMP',
-                                                'SMA' => 'SMA',
+                                                'SMA/SMK' => 'SMA/SMK',
                                                 'D1' => 'D1',
                                                 'D2' => 'D2',
                                                 'D3' => 'D3',
@@ -217,7 +260,9 @@ class WargaResource extends Resource
                                                 'S2' => 'S2',
                                                 'S3' => 'S3',
                                             ])
+                                            ->visible(fn($get) => $get('pekerjaan') !== 'Pelajar/Mahasiswa')
                                             ->nullable(),
+
 
                                         Forms\Components\Select::make('domisili')
                                             ->options([
@@ -227,7 +272,7 @@ class WargaResource extends Resource
                                             ->nullable()
                                             ->columnSpan(1),
 
-                                        Forms\Components\Hidden::make('jenis_warga')->default('anggota_keluarga'),
+                                        Forms\Components\Hidden::make('jenis_warga')->default('Anggota Keluarga'),
                                     ])
                             ])
                             ->addActionLabel('Tambah Anggota Keluarga')
@@ -322,7 +367,7 @@ class WargaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->where('jenis_warga', 'kepala_keluarga'))
+            ->modifyQueryUsing(fn($query) => $query->where('jenis_warga', 'Kepala Keluarga'))
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_keluarga')->label('Nomor Keluarga'),
                 Tables\Columns\TextColumn::make('nama_lengkap')->label('Nama Lengkap'),
