@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\WargaResource\Pages;
 
-use App\Filament\Resources\WargaResource;
 use Filament\Actions;
+use App\Filament\Resources\WargaResource;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListWargas extends ListRecords
 {
@@ -16,4 +17,12 @@ class ListWargas extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    protected function getTableQuery(): Builder
+    {
+        return parent::getTableQuery()
+            ->orderBy('rt', 'asc')
+            ->orderBy('nama_lengkap', 'asc');
+    }
+
 }
